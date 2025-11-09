@@ -1,1 +1,1 @@
-export {RQWrapper} from './RQWrapper';
+export {RQWrapper as ReactQueryWrapper} from './RQWrapper';

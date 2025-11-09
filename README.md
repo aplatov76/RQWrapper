@@ -3,6 +3,9 @@ markdown
 
 A React Query wrapper component for efficiently managing multiple queries and their loading states.
 
+# Repository
+https://github.com/aplatov76/RQWrapper
+
 ## Installation
 
 ```bash
@@ -11,10 +14,10 @@ yarn add @rndx/rq-wrapper
 ## Usage Example
 
 jsx
-import RQWrapper from '@rndx/rq-wrapper';
+import ReactQueryWrapper from '@rndx/rq-wrapper';
 
 // In your component
-<RQWrapper
+<ReactQueryWrapper
   queries={{ map: mapQueryOptions }}
   loader={<CircleLoader />}
   error="Something went wrong"
@@ -28,7 +31,7 @@ import RQWrapper from '@rndx/rq-wrapper';
       </MapContextProvider>
     );
   }}
-</RQWrapper>
+</ReactQueryWrapper>
 
 ## Props
 queries (object): An object where keys are query names and values are React Query options objects
