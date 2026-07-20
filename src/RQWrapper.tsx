@@ -6,15 +6,20 @@ import { RQChildrenWrapper } from './RQChildrenWrapper';
 
 import {
   BasedUseQueryHookConfiguration,
+  BasedUseQueryHookConfigurations,
+  BasedUseQueryHookResultInObject,
+  QueriesData,
+  QueryDataTypes,
   type NonNullableQueriesData,
 } from './types';
 import { isNonNullableQueriesData, useQueriesStages } from './utils';
 
 import styles from './RQWrapper.module.css';
 
-export type RQWrapperQueriesKeys<T, U> = keyof RQWrapperProps<T, U>['queries'];
+export type RQWrapperQueriesKeys<T> = keyof RQWrapperProps<T>['queries'];
+export type RQWrapperQueriesValues<T> = RQWrapperProps<T>['queries'];
 
-export interface RQWrapperProps<T, U> {
+export interface RQWrapperProps<T> {
   /** className для дополнительной стилизации в состоянии isLoading/isError */
   className?: string;
   /** Стили блока children-компонента */
@@ -22,11 +27,11 @@ export interface RQWrapperProps<T, U> {
   /** Кастомный тег для children-компонента. По дефолту div */
   as?: ElementType;
   /** Результаты вызова useQuery, обернутые в объект */
-  queries: Record<string, BasedUseQueryHookConfiguration<T, U>>;
+  queries: BasedUseQueryHookConfigurations<T>;
   /** Функция, позволяющая передать NonNullable данные из useQuery */
   //children: (queriesData: NonNullableQueriesData<U>) => ReactNode;
   children: (
-    queriesData: Record<RQWrapperQueriesKeys<T, U>, NonNullableQueriesData<U>>
+    queriesData: NonNullableQueriesData<QueriesData<T>>
   ) => ReactNode;
   //keyof RtkWrapperProps<T, U>['queries']
   loader: ReactNode;
@@ -41,7 +46,7 @@ export interface RQWrapperProps<T, U> {
  * Может принимать один или несколько результатов вызова useQuery в виде объекта.
  * Проверка на undefined и состояния вычисляются общие для всех Query.
  */
-export const RQWrapper = <T, U = T>(props: RQWrapperProps<T, U>) => {
+export const RQWrapper = <T, U = T>(props: RQWrapperProps<T>) => {
   const {
     className,
     as,
@@ -54,14 +59,13 @@ export const RQWrapper = <T, U = T>(props: RQWrapperProps<T, U>) => {
   } = props;
 
   const { queriesData, isLoading, isFetching, isError } = useQueriesStages<
-    T,
-    U
+    T
   >(queries, isUseCurrentData);
 
   const isSuccess = !isError && (isUseCurrentData ? !isFetching : !isLoading);
 
   if (isSuccess) {
-    const isNonNullableData = isNonNullableQueriesData<T, U>(queriesData);
+    const isNonNullableData = isNonNullableQueriesData<T>(queriesData);
 
     if (isNonNullableData) {
       return (
